@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.12), transparent 40%),
+      radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.10), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.10), transparent 50%),
+      #020617;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-white/10 bg-ink-900/60 backdrop-blur-md shadow-card;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ink-900 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-amber-500 text-ink-950 hover:bg-amber-400 focus:ring-amber-400;
+  }
+  .btn-secondary {
+    @apply btn bg-white/10 text-ink-50 hover:bg-white/15 focus:ring-white/30;
+  }
+  .btn-ghost {
+    @apply btn text-ink-200 hover:bg-white/5;
+  }
+  .btn-danger {
+    @apply btn bg-red-500 text-white hover:bg-red-400 focus:ring-red-400;
+  }
+  .input {
+    @apply w-full rounded-lg border border-white/10 bg-ink-900/50 px-3 py-2 text-ink-50 placeholder:text-ink-500 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-200;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+}
+
+@property --holo-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.holo-card {
+  background-image: var(--holo-bg, none);
+  background-size: 200% 100%;
+}

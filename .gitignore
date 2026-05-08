@@ -1,0 +1,38 @@
+node_modules/
+dist/
+build/
+.next/
+.cache/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# uploads
+server/uploads/*
+!server/uploads/.gitkeep
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+*.swp
+
+# prisma
+server/prisma/migrations/dev.db*
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Compiled vite config (generated from vite.config.ts)
+client/vite.config.js
+client/vite.config.d.ts
