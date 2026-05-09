@@ -4,6 +4,7 @@ import {
   ChevronRight, Sparkles,
 } from 'lucide-react'
 import { useAuth } from '../../store/auth'
+import ThemeToggle from '../ThemeToggle'
 import clsx from 'clsx'
 
 type NavItem = {
@@ -93,9 +94,14 @@ export default function AppShell() {
           })}
         </nav>
 
+        {/* Theme toggle row */}
+        <div className="relative px-3 pb-2">
+          <ThemeToggle />
+        </div>
+
         {/* User pill */}
-        <div className="relative border-t border-white/[0.06] p-3">
-          <div className="flex items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] p-2.5">
+        <div className="relative border-t border-[color:var(--panel-border)] p-3">
+          <div className="flex items-center gap-2.5 rounded-xl border border-[color:var(--panel-border)] bg-[color:var(--overlay-soft)] p-2.5">
             <div
               className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-xs font-bold text-amber-100"
               style={{

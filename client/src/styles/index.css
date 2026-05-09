@@ -2,70 +2,160 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    color-scheme: dark;
-  }
+/* ─── Theme tokens ─────────────────────────────────────────────────
+   The `ink-*` palette flips between dark and light themes so that
+   existing `bg-ink-950` / `text-ink-50` automatically adapt. Other
+   semantic tokens (--bg, --panel, --border, --overlay) cover surfaces
+   that use CSS variables directly (body bg, panels). */
 
+:root,
+:root.dark {
+  color-scheme: dark;
+
+  /* ink scale (numeric value = darkness) */
+  --ink-50:  248 250 252;   /* lightest */
+  --ink-100: 241 245 249;
+  --ink-200: 226 232 240;
+  --ink-300: 203 213 225;
+  --ink-400: 148 163 184;
+  --ink-500: 100 116 139;
+  --ink-600: 71 85 105;
+  --ink-700: 51 65 85;
+  --ink-800: 30 41 59;
+  --ink-900: 13 17 23;
+  --ink-950: 7 9 15;       /* darkest = page background */
+
+  /* Surfaces */
+  --bg-base: #07090F;
+  --bg-grad-1: rgba(168, 85, 247, 0.10);
+  --bg-grad-2: rgba(59, 130, 246, 0.09);
+  --bg-grad-3: rgba(245, 158, 11, 0.08);
+
+  --panel-bg: rgba(255, 255, 255, 0.03);
+  --panel-border: rgba(255, 255, 255, 0.07);
+  --panel-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -1px 0 rgba(0,0,0,0.3),
+    0 8px 32px -8px rgba(0,0,0,0.35);
+
+  --overlay-soft: rgba(255, 255, 255, 0.03);
+  --overlay-medium: rgba(255, 255, 255, 0.06);
+  --overlay-strong: rgba(255, 255, 255, 0.10);
+
+  --scroll-thumb: rgba(255, 255, 255, 0.12);
+  --scroll-thumb-hover: rgba(255, 255, 255, 0.22);
+}
+
+:root.light {
+  color-scheme: light;
+
+  /* Flipped ink scale: small numbers = dark text, big numbers = light surface */
+  --ink-50:  15 23 42;     /* dark "50" = primary text */
+  --ink-100: 30 41 59;
+  --ink-200: 51 65 85;
+  --ink-300: 71 85 105;
+  --ink-400: 100 116 139;
+  --ink-500: 148 163 184;
+  --ink-600: 168 178 198;
+  --ink-700: 203 213 225;
+  --ink-800: 226 232 240;
+  --ink-900: 241 245 249;
+  --ink-950: 248 250 252;  /* lightest "950" = page background */
+
+  --bg-base: #F8FAFC;
+  --bg-grad-1: rgba(168, 85, 247, 0.08);
+  --bg-grad-2: rgba(59, 130, 246, 0.07);
+  --bg-grad-3: rgba(245, 158, 11, 0.06);
+
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(15, 23, 42, 0.08);
+  --panel-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 1px 3px rgba(15,23,42,0.06),
+    0 8px 24px -10px rgba(15,23,42,0.10);
+
+  --overlay-soft: rgba(15, 23, 42, 0.03);
+  --overlay-medium: rgba(15, 23, 42, 0.06);
+  --overlay-strong: rgba(15, 23, 42, 0.10);
+
+  --scroll-thumb: rgba(15, 23, 42, 0.15);
+  --scroll-thumb-hover: rgba(15, 23, 42, 0.30);
+}
+
+@layer base {
   html, body, #root {
     height: 100%;
   }
 
   body {
+    color: rgb(var(--ink-100));
     background:
-      radial-gradient(ellipse 80% 50% at 0% 0%,   rgba(168, 85, 247, 0.10), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 0%,  rgba(59, 130, 246, 0.09), transparent),
-      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(245, 158, 11, 0.08), transparent),
-      #07090F;
+      radial-gradient(ellipse 80% 50% at 0% 0%,   var(--bg-grad-1), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, var(--bg-grad-2), transparent),
+      radial-gradient(ellipse 70% 50% at 50% 100%, var(--bg-grad-3), transparent),
+      var(--bg-base);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Custom scrollbar */
   ::-webkit-scrollbar       { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+  ::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
 
-  /* Text selection */
-  ::selection { background: rgba(245,158,11,0.28); color: #FCD34D; }
+  ::selection { background: rgba(245,158,11,0.28); color: #B45309; }
+  :root.light ::selection { background: rgba(245,158,11,0.30); color: #92400E; }
 }
 
 @layer components {
 
   /* ─── Panels / Cards ─────────────────────────────── */
   .panel {
-    @apply rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-xl;
-    box-shadow:
-      0 1px 0 rgba(255,255,255,0.07) inset,
-      0 -1px 0 rgba(0,0,0,0.3) inset,
-      0 8px 32px -8px rgba(0,0,0,0.35);
+    @apply rounded-2xl border backdrop-blur-xl;
+    background-color: var(--panel-bg);
+    border-color: var(--panel-border);
+    box-shadow: var(--panel-shadow);
   }
 
   .glass {
-    @apply rounded-xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl;
+    @apply rounded-xl border backdrop-blur-xl;
+    background-color: var(--overlay-soft);
+    border-color: var(--panel-border);
   }
 
   /* ─── Buttons ────────────────────────────────────── */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ink-950
+           focus:outline-none focus:ring-2 focus:ring-offset-2
            disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none
            active:scale-[0.97];
+    --tw-ring-offset-color: rgb(var(--ink-950));
   }
   .btn-primary {
     @apply btn bg-amber-500 text-ink-950 hover:bg-amber-400
            focus:ring-amber-400
            shadow-[0_0_0_1px_rgba(245,158,11,0.5),0_4px_16px_-4px_rgba(245,158,11,0.4)];
+    color: #0F172A; /* keep readable on amber regardless of theme */
   }
   .btn-primary:hover {
     box-shadow: 0 0 0 1px rgba(252,211,77,0.6), 0 6px 24px -4px rgba(245,158,11,0.55);
   }
   .btn-secondary {
-    @apply btn border border-white/[0.10] bg-white/[0.05] text-ink-100
-           hover:bg-white/[0.09] hover:border-white/[0.15] hover:text-white
-           focus:ring-white/20;
+    @apply btn border text-ink-100
+           focus:ring-amber-400/40;
+    background-color: var(--overlay-soft);
+    border-color: var(--panel-border);
+  }
+  .btn-secondary:hover {
+    background-color: var(--overlay-medium);
+    border-color: var(--overlay-strong);
+    color: rgb(var(--ink-50));
   }
   .btn-ghost {
-    @apply btn text-ink-300 hover:bg-white/[0.06] hover:text-ink-50 focus:ring-white/20;
+    @apply btn text-ink-300 focus:ring-amber-400/40;
+  }
+  .btn-ghost:hover {
+    background-color: var(--overlay-soft);
+    color: rgb(var(--ink-50));
   }
   .btn-danger {
     @apply btn bg-red-500/90 text-white hover:bg-red-400
@@ -77,11 +167,15 @@
 
   /* ─── Form inputs ────────────────────────────────── */
   .input {
-    @apply w-full rounded-xl border border-white/[0.08] bg-ink-900/60 px-3.5 py-2.5
+    @apply w-full rounded-xl border px-3.5 py-2.5
            text-ink-50 placeholder:text-ink-600
            transition-all duration-200
-           focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/20
-           focus:bg-ink-900/80;
+           focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/20;
+    background-color: var(--overlay-soft);
+    border-color: var(--panel-border);
+  }
+  .input:focus {
+    background-color: var(--overlay-medium);
   }
 
   .label {
@@ -99,12 +193,14 @@
 
   /* ─── Divider ────────────────────────────────────── */
   .divider {
-    @apply border-t border-white/[0.06];
+    @apply border-t;
+    border-color: var(--panel-border);
   }
 
   /* ─── Loading skeleton ───────────────────────────── */
   .skeleton {
-    @apply animate-pulse rounded-lg bg-white/[0.05];
+    @apply animate-pulse rounded-lg;
+    background-color: var(--overlay-medium);
   }
 }
 
@@ -122,7 +218,7 @@
 
 /* ─── Shimmer loading line ───────────────────────── */
 .shimmer-line {
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--overlay-medium) 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 1.8s linear infinite;
 }

@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2, Sparkles, AlertTriangle, CheckCircle2 } from 'lucid
 import axios from 'axios'
 import { ARCHETYPES } from '../lib/archetypes'
 import type { Archetype } from '../api/client'
+import ThemeToggle from '../components/ThemeToggle'
 
 // Public client — no credentials needed
 const publicApi = axios.create({ baseURL: '/api/public' })
@@ -298,12 +299,15 @@ function PublicShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen px-5 py-10 sm:px-8 md:py-16">
       <div className="mx-auto mb-10 flex max-w-3xl items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-purple-500 to-blue-500 font-display text-base font-bold text-ink-950">
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-purple-500 to-blue-500 font-display text-base font-bold text-white">
           T
         </div>
         <div>
-          <div className="font-display text-base font-bold tracking-wide text-amber-300">TAS Cards</div>
+          <div className="font-display text-base font-bold tracking-wide text-amber-400">TAS Cards</div>
           <div className="text-[11px] text-ink-500">Self-Assessment Portal</div>
+        </div>
+        <div className="ml-auto">
+          <ThemeToggle compact />
         </div>
       </div>
       <div className="mx-auto max-w-3xl">{children}</div>

@@ -3,6 +3,7 @@ import typography from '@tailwindcss/typography'
 
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -10,18 +11,22 @@ export default {
         display: ['Poppins', 'IBM Plex Sans Thai', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // ── Semantic ink scale via CSS vars ──
+        // In dark mode (default): 50 = lightest, 950 = darkest (current behavior)
+        // In light mode: scale flips so 50 = dark text, 950 = light surface
+        // Every existing `bg-ink-950` automatically adapts.
         ink: {
-          50:  '#F8FAFC',
-          100: '#F1F5F9',
-          200: '#E2E8F0',
-          300: '#CBD5E1',
-          400: '#94A3B8',
-          500: '#64748B',
-          600: '#475569',
-          700: '#334155',
-          800: '#1E293B',
-          900: '#0D1117',
-          950: '#07090F',
+          50:  'rgb(var(--ink-50) / <alpha-value>)',
+          100: 'rgb(var(--ink-100) / <alpha-value>)',
+          200: 'rgb(var(--ink-200) / <alpha-value>)',
+          300: 'rgb(var(--ink-300) / <alpha-value>)',
+          400: 'rgb(var(--ink-400) / <alpha-value>)',
+          500: 'rgb(var(--ink-500) / <alpha-value>)',
+          600: 'rgb(var(--ink-600) / <alpha-value>)',
+          700: 'rgb(var(--ink-700) / <alpha-value>)',
+          800: 'rgb(var(--ink-800) / <alpha-value>)',
+          900: 'rgb(var(--ink-900) / <alpha-value>)',
+          950: 'rgb(var(--ink-950) / <alpha-value>)',
         },
         delegate: { 400: '#FCD34D', 500: '#F59E0B', 600: '#D97706', 700: '#B45309' },
         coach:    { 400: '#60A5FA', 500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8' },
