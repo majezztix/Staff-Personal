@@ -8,11 +8,11 @@ import { ARCHETYPES } from '../lib/archetypes'
 import ArchetypeBadge from '../components/cards/ArchetypeBadge'
 
 const LIKERT = [
-  { value: 1, label: 'ไม่จริงเลย', color: '#EF4444' },
-  { value: 2, label: 'ค่อนข้างไม่จริง', color: '#F97316' },
-  { value: 3, label: 'กลาง ๆ', color: '#FCD34D' },
-  { value: 4, label: 'ค่อนข้างจริง', color: '#84CC16' },
-  { value: 5, label: 'จริงมาก', color: '#22C55E' },
+  { value: 1, label: 'ไม่จริงเลย',       color: '#F87171' },
+  { value: 2, label: 'ค่อนข้างไม่จริง',  color: '#FB923C' },
+  { value: 3, label: 'กลาง ๆ',            color: '#FCD34D' },
+  { value: 4, label: 'ค่อนข้างจริง',      color: '#86EFAC' },
+  { value: 5, label: 'จริงมาก',           color: '#4ADE80' },
 ]
 
 export default function Assessment() {
@@ -54,7 +54,7 @@ export default function Assessment() {
     setTimeout(() => {
       if (step < total - 1) setStep(step + 1)
       else submitMut.mutate()
-    }, 280)
+    }, 260)
   }
 
   function back() {
@@ -71,97 +71,128 @@ export default function Assessment() {
     return () => window.removeEventListener('keydown', onKey)
   })
 
-  if (isLoading || !current) return <div className="text-ink-400">Loading…</div>
+  if (isLoading || !current) {
+    return <div className="grid place-items-center py-20 text-sm text-ink-600">Loading…</div>
+  }
 
-  if (result) return <ResultReveal result={result} employeeName={employee?.fullName || ''} onDone={() => navigate(`/employees/${id}`)} />
+  if (result) {
+    return (
+      <ResultReveal
+        result={result}
+        employeeName={employee?.fullName || ''}
+        onDone={() => navigate(`/employees/${id}`)}
+      />
+    )
+  }
 
   const progress = ((step + 1) / total) * 100
-  const axisColor = current.axis === 'SKILL' ? '#3B82F6' : '#A855F7'
+  const axisColor = current.axis === 'SKILL' ? '#60A5FA' : '#C084FC'
 
   return (
     <div className="min-h-[80vh]">
+      {/* Header */}
       <div className="mb-6 flex items-center justify-between">
-        <button onClick={() => navigate(`/employees/${id}`)} className="btn-ghost">
-          <ArrowLeft size={16} /> ออก
+        <button onClick={() => navigate(`/employees/${id}`)} className="btn-ghost btn-sm">
+          <ArrowLeft size={14} /> ออก
         </button>
-        <div className="text-sm text-ink-400">
-          {employee?.fullName} · ข้อ <span className="font-bold text-ink-100">{step + 1}</span> / {total}
+        <div className="text-xs text-ink-500">
+          {employee?.fullName} · ข้อ{' '}
+          <span className="font-bold text-ink-200">{step + 1}</span>
+          <span className="text-ink-600"> / {total}</span>
         </div>
         <div className="w-20" />
       </div>
 
-      <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-ink-900/80">
-        <motion.div
-          className="h-full"
-          style={{ background: 'linear-gradient(90deg, #F59E0B, #A855F7, #3B82F6)' }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.5 }}
-        />
+      {/* Progress */}
+      <div className="mb-10 space-y-1.5">
+        <div className="flex justify-between text-[10px] text-ink-600">
+          <span>Progress</span>
+          <span>{Math.round(progress)}%</span>
+        </div>
+        <div className="h-1.5 overflow-hidden rounded-full bg-ink-800/80">
+          <motion.div
+            className="h-full rounded-full"
+            style={{ background: 'linear-gradient(90deg, #F59E0B 0%, #A855F7 50%, #3B82F6 100%)' }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          />
+        </div>
       </div>
 
       <div className="grid place-items-center">
+        {/* Question card */}
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, x: 60, rotateY: 25 }}
+            initial={{ opacity: 0, x: 50, rotateY: 20 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            exit={{ opacity: 0, x: -60, rotateY: -25 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: -50, rotateY: -20 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             style={{ perspective: 1200 }}
             className="w-full max-w-xl"
           >
             <div
-              className="relative overflow-hidden rounded-2xl p-8 ring-1 ring-white/10"
+              className="relative overflow-hidden rounded-2xl p-8"
               style={{
-                background: `linear-gradient(155deg, ${axisColor}22 0%, rgba(2,6,23,0.95) 50%, rgba(2,6,23,1) 100%)`,
-                boxShadow: `0 30px 70px -25px ${axisColor}66`,
+                background: `linear-gradient(155deg, ${axisColor}1A 0%, rgba(7,9,15,0.97) 55%, rgba(7,9,15,1) 100%)`,
+                boxShadow: `0 0 0 1px ${axisColor}28, 0 28px 64px -20px ${axisColor}44`,
               }}
             >
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-widest"
-                style={{ backgroundColor: `${axisColor}33`, color: axisColor }}>
+              <div className="absolute inset-x-0 top-0 h-[1px]"
+                style={{ background: `linear-gradient(90deg, transparent, ${axisColor}66, transparent)` }} />
+
+              <div
+                className="mb-5 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em]"
+                style={{ backgroundColor: `${axisColor}1A`, color: axisColor }}
+              >
                 {current.axis === 'SKILL' ? '⚡ Skill Axis' : '🔥 Will Axis'}
               </div>
-              <p className="font-display text-2xl font-bold leading-relaxed text-ink-50">{current.text}</p>
+              <p className="font-display text-2xl font-bold leading-relaxed text-white">
+                {current.text}
+              </p>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-8 grid grid-cols-5 gap-3 w-full max-w-2xl">
+        {/* Likert cards */}
+        <div className="mt-6 grid grid-cols-5 gap-2.5 w-full max-w-xl">
           {LIKERT.map((l) => {
             const selected = answers[current.id] === l.value
             return (
               <motion.button
                 key={l.value}
-                whileHover={{ y: -4, scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ y: -5, scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => pick(l.value)}
-                className="relative overflow-hidden rounded-xl p-4 text-center ring-1 transition"
+                className="relative overflow-hidden rounded-xl px-2 py-4 text-center transition-all"
                 style={{
-                  backgroundColor: selected ? `${l.color}33` : 'rgba(2,6,23,0.6)',
-                  boxShadow: selected ? `0 0 0 2px ${l.color}` : `inset 0 0 0 1px rgba(255,255,255,0.08)`,
+                  backgroundColor: selected ? `${l.color}22` : 'rgba(255,255,255,0.03)',
+                  boxShadow: selected
+                    ? `0 0 0 2px ${l.color}, 0 8px 24px -8px ${l.color}66`
+                    : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
                 }}
               >
-                <div className="text-2xl font-bold" style={{ color: l.color }}>
+                <div className="font-display text-2xl font-bold" style={{ color: l.color }}>
                   {l.value}
                 </div>
-                <div className="mt-1 text-[11px] text-ink-300">{l.label}</div>
+                <div className="mt-1 text-[10px] leading-snug text-ink-500">{l.label}</div>
               </motion.button>
             )
           })}
         </div>
 
-        <div className="mt-6 flex items-center gap-3 text-xs text-ink-500">
+        <div className="mt-5 flex items-center gap-4 text-xs text-ink-600">
           <span>⌨ กดเลข 1-5 เพื่อเลือก</span>
           {step > 0 && (
-            <button onClick={back} className="btn-ghost text-xs">
-              <ArrowLeft size={12} /> ย้อนกลับ
+            <button onClick={back} className="btn-ghost btn-sm text-ink-600">
+              <ArrowLeft size={11} /> ย้อนกลับ
             </button>
           )}
         </div>
 
         {submitMut.isPending && (
-          <div className="mt-8 flex items-center gap-2 text-amber-300">
-            <Loader2 className="animate-spin" size={16} /> กำลังคำนวณผล...
+          <div className="mt-8 flex items-center gap-2 text-sm text-amber-300">
+            <Loader2 className="animate-spin" size={15} /> กำลังคำนวณผล…
           </div>
         )}
       </div>
@@ -181,81 +212,95 @@ function ResultReveal({
   const t = ARCHETYPES[result.archetype]
 
   return (
-    <div className="grid min-h-[70vh] place-items-center">
+    <div className="grid min-h-[75vh] place-items-center">
       <motion.div
-        initial={{ opacity: 0, scale: 0.85 }}
+        initial={{ opacity: 0, scale: 0.88 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="text-center"
       >
-        <div className="mb-2 text-sm uppercase tracking-[0.3em] text-ink-500">Result</div>
         <motion.div
-          initial={{ rotateY: 180, opacity: 0 }}
-          animate={{ rotateY: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.7 }}
-          className="mx-auto mb-6 flex h-44 w-44 items-center justify-center rounded-full ring-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="mb-3 text-[10px] font-bold uppercase tracking-[0.25em] text-ink-600"
+        >
+          Result
+        </motion.div>
+
+        <motion.div
+          initial={{ rotateY: 180, opacity: 0, scale: 0.8 }}
+          animate={{ rotateY: 0, opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto mb-8 flex h-44 w-44 items-center justify-center rounded-full ring-2"
           style={{
-            background: `radial-gradient(circle, ${t.primary}55, transparent 70%)`,
-            boxShadow: `0 0 80px ${t.primary}55`,
-            borderColor: t.primary,
+            background: `radial-gradient(circle, ${t.primary}44, transparent 70%)`,
+            boxShadow: `0 0 100px ${t.primary}55, 0 0 40px ${t.primary}33`,
+            borderColor: `${t.primary}66`,
           }}
         >
-          <Sparkles size={56} style={{ color: t.primary }} />
+          <Sparkles size={52} style={{ color: t.primary }} />
         </motion.div>
+
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.65 }}
           className="font-display text-6xl font-bold tracking-tight"
-          style={{ color: t.primary, textShadow: `0 0 30px ${t.primary}88` }}
+          style={{ color: t.primary, textShadow: `0 0 40px ${t.primary}66` }}
         >
           {t.label}
         </motion.h1>
+
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85 }}
-          className="mt-3 text-lg text-ink-200"
+          transition={{ delay: 0.8 }}
+          className="mt-3 text-base text-ink-200"
         >
-          {employeeName} · <span className="text-ink-400">{t.tagline}</span>
+          {employeeName} · <span className="text-ink-500">{t.tagline}</span>
         </motion.p>
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="mt-4 max-w-md text-sm text-ink-400 mx-auto"
+          transition={{ delay: 0.95 }}
+          className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500"
         >
           {t.description}
         </motion.p>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.15 }}
-          className="mt-6 flex justify-center gap-6 text-sm text-ink-400"
+          transition={{ delay: 1.1 }}
+          className="mt-6 flex justify-center gap-8 text-sm"
         >
-          <div>
-            Skill <span className="text-ink-50 font-bold">{result.skillScore.toFixed(0)}</span>
+          <div className="text-ink-500">
+            Skill <span className="ml-1 font-display text-xl font-bold text-blue-400">{result.skillScore.toFixed(0)}</span>
           </div>
-          <div>
-            Will <span className="text-ink-50 font-bold">{result.willScore.toFixed(0)}</span>
+          <div className="text-ink-500">
+            Will <span className="ml-1 font-display text-xl font-bold text-purple-400">{result.willScore.toFixed(0)}</span>
           </div>
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4 }}
-          className="mt-8 flex justify-center gap-2"
+          transition={{ delay: 1.25 }}
+          className="mt-5 flex justify-center"
         >
           <ArchetypeBadge archetype={result.archetype} size="lg" />
         </motion.div>
+
         <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5 }}
           onClick={onDone}
-          className="btn-primary mt-8"
+          className="btn-primary mt-8 px-8 py-3"
         >
-          ดูแผนพัฒนา <ArrowRight size={16} />
+          ดูแผนพัฒนา <ArrowRight size={15} />
         </motion.button>
       </motion.div>
     </div>

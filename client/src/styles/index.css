@@ -6,48 +6,109 @@
   :root {
     color-scheme: dark;
   }
+
   html, body, #root {
     height: 100%;
   }
+
   body {
     background:
-      radial-gradient(circle at 0% 0%, rgba(168, 85, 247, 0.12), transparent 40%),
-      radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.10), transparent 40%),
-      radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.10), transparent 50%),
-      #020617;
+      radial-gradient(ellipse 80% 50% at 0% 0%,   rgba(168, 85, 247, 0.10), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%,  rgba(59, 130, 246, 0.09), transparent),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(245, 158, 11, 0.08), transparent),
+      #07090F;
   }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+  /* Text selection */
+  ::selection { background: rgba(245,158,11,0.28); color: #FCD34D; }
 }
 
 @layer components {
+
+  /* ─── Panels / Cards ─────────────────────────────── */
   .panel {
-    @apply rounded-2xl border border-white/10 bg-ink-900/60 backdrop-blur-md shadow-card;
+    @apply rounded-2xl border border-white/[0.07] bg-white/[0.03] shadow-panel backdrop-blur-xl;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.07) inset,
+      0 -1px 0 rgba(0,0,0,0.3) inset,
+      0 8px 32px -8px rgba(0,0,0,0.35);
   }
+
+  .glass {
+    @apply rounded-xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl;
+  }
+
+  /* ─── Buttons ────────────────────────────────────── */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ink-900 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ink-950
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none
+           active:scale-[0.97];
   }
   .btn-primary {
-    @apply btn bg-amber-500 text-ink-950 hover:bg-amber-400 focus:ring-amber-400;
+    @apply btn bg-amber-500 text-ink-950 hover:bg-amber-400
+           focus:ring-amber-400
+           shadow-[0_0_0_1px_rgba(245,158,11,0.5),0_4px_16px_-4px_rgba(245,158,11,0.4)];
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 0 1px rgba(252,211,77,0.6), 0 6px 24px -4px rgba(245,158,11,0.55);
   }
   .btn-secondary {
-    @apply btn bg-white/10 text-ink-50 hover:bg-white/15 focus:ring-white/30;
+    @apply btn border border-white/[0.10] bg-white/[0.05] text-ink-100
+           hover:bg-white/[0.09] hover:border-white/[0.15] hover:text-white
+           focus:ring-white/20;
   }
   .btn-ghost {
-    @apply btn text-ink-200 hover:bg-white/5;
+    @apply btn text-ink-300 hover:bg-white/[0.06] hover:text-ink-50 focus:ring-white/20;
   }
   .btn-danger {
-    @apply btn bg-red-500 text-white hover:bg-red-400 focus:ring-red-400;
+    @apply btn bg-red-500/90 text-white hover:bg-red-400
+           shadow-[0_0_0_1px_rgba(239,68,68,0.4)] focus:ring-red-400;
   }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs rounded-lg;
+  }
+
+  /* ─── Form inputs ────────────────────────────────── */
   .input {
-    @apply w-full rounded-lg border border-white/10 bg-ink-900/50 px-3 py-2 text-ink-50 placeholder:text-ink-500 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30;
+    @apply w-full rounded-xl border border-white/[0.08] bg-ink-900/60 px-3.5 py-2.5
+           text-ink-50 placeholder:text-ink-600
+           transition-all duration-200
+           focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/20
+           focus:bg-ink-900/80;
   }
+
   .label {
-    @apply mb-1.5 block text-sm font-medium text-ink-200;
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink-400;
   }
+
+  .select {
+    @apply input appearance-none cursor-pointer;
+  }
+
+  /* ─── Badge ──────────────────────────────────────── */
   .badge {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold tracking-wide;
+  }
+
+  /* ─── Divider ────────────────────────────────────── */
+  .divider {
+    @apply border-t border-white/[0.06];
+  }
+
+  /* ─── Loading skeleton ───────────────────────────── */
+  .skeleton {
+    @apply animate-pulse rounded-lg bg-white/[0.05];
   }
 }
 
+/* ─── Holo card property ─────────────────────────── */
 @property --holo-angle {
   syntax: '<angle>';
   inherits: false;
@@ -57,4 +118,11 @@
 .holo-card {
   background-image: var(--holo-bg, none);
   background-size: 200% 100%;
+}
+
+/* ─── Shimmer loading line ───────────────────────── */
+.shimmer-line {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
 }

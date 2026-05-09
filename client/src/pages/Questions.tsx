@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Trash2, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Loader2, RotateCcw } from 'lucide-react'
 import { api, type Question } from '../api/client'
 import { useAuth } from '../store/auth'
 import PageHeader from '../components/layout/PageHeader'
@@ -40,14 +40,14 @@ export default function Questions() {
 
   if (!isSuper) {
     return (
-      <div className="panel p-12 text-center text-ink-400">
+      <div className="panel p-12 text-center text-sm text-ink-600">
         ต้องเป็น Superadmin จึงจะแก้ไขคำถามได้
       </div>
     )
   }
 
   const skillCount = questions.filter((q) => q.axis === 'SKILL' && q.active).length
-  const willCount = questions.filter((q) => q.axis === 'WILL' && q.active).length
+  const willCount  = questions.filter((q) => q.axis === 'WILL'  && q.active).length
 
   return (
     <div>
@@ -56,8 +56,9 @@ export default function Questions() {
         subtitle={`Skill ${skillCount} ข้อ · Will ${willCount} ข้อ · รวม ${questions.length}`}
       />
 
-      <div className="panel p-6 mb-6">
-        <h2 className="font-display text-lg font-bold mb-4 text-ink-50">เพิ่มคำถาม</h2>
+      {/* Add form */}
+      <div className="panel p-6 mb-5">
+        <h2 className="font-display text-base font-bold mb-4 text-white">เพิ่มคำถาม</h2>
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -66,7 +67,7 @@ export default function Questions() {
           className="space-y-3"
         >
           <textarea
-            className="input min-h-[80px]"
+            className="input min-h-[80px] resize-none"
             placeholder="ข้อความคำถาม..."
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -77,55 +78,73 @@ export default function Questions() {
               <option value="SKILL">Skill axis</option>
               <option value="WILL">Will axis</option>
             </select>
-            <label className="flex items-center gap-2 text-sm text-ink-300">
-              <input type="checkbox" checked={reversed} onChange={(e) => setReversed(e.target.checked)} />
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink-400 select-none">
+              <input
+                type="checkbox"
+                checked={reversed}
+                onChange={(e) => setReversed(e.target.checked)}
+                className="h-4 w-4 rounded border-white/20 bg-ink-900 accent-amber-400"
+              />
               Reverse-scored
             </label>
-            <button type="submit" className="btn-primary ml-auto" disabled={addMut.isPending}>
-              {addMut.isPending ? <Loader2 className="animate-spin" size={14} /> : <Plus size={14} />} เพิ่ม
+            <button type="submit" className="btn-primary btn-sm ml-auto" disabled={addMut.isPending}>
+              {addMut.isPending ? <Loader2 className="animate-spin" size={13} /> : <Plus size={13} />}
+              เพิ่ม
             </button>
           </div>
         </form>
       </div>
 
-      <div className="panel divide-y divide-white/5">
+      {/* Question list */}
+      <div className="panel overflow-hidden">
         {isLoading ? (
-          <div className="p-6 text-ink-400">Loading...</div>
+          <div className="space-y-2 p-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="skeleton h-10 rounded-lg" />
+            ))}
+          </div>
         ) : (
-          questions.map((q) => (
-            <div key={q.id} className={`flex items-start gap-3 p-4 ${!q.active ? 'opacity-40' : ''}`}>
-              <span
-                className="mt-0.5 inline-flex w-14 shrink-0 justify-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest"
-                style={{
-                  backgroundColor: q.axis === 'SKILL' ? '#3B82F633' : '#A855F733',
-                  color: q.axis === 'SKILL' ? '#60A5FA' : '#C084FC',
-                }}
+          <div className="divide-y divide-white/[0.05]">
+            {questions.map((q) => (
+              <div
+                key={q.id}
+                className={`flex items-start gap-3 px-4 py-3.5 transition hover:bg-white/[0.02] ${!q.active ? 'opacity-40' : ''}`}
               >
-                {q.axis}
-              </span>
-              <div className="flex-1">
-                <div className="text-sm text-ink-100">{q.text}</div>
-                {q.reversed && (
-                  <div className="mt-1 text-[10px] uppercase tracking-widest text-amber-400">REVERSE</div>
-                )}
+                <span
+                  className="mt-0.5 inline-flex w-14 shrink-0 justify-center rounded-lg px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+                  style={{
+                    backgroundColor: q.axis === 'SKILL' ? '#3B82F620' : '#A855F720',
+                    color: q.axis === 'SKILL' ? '#60A5FA' : '#C084FC',
+                  }}
+                >
+                  {q.axis}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-ink-200 leading-relaxed">{q.text}</div>
+                  {q.reversed && (
+                    <span className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-amber-400">
+                      <RotateCcw size={9} /> REVERSE
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleMut.mutate(q)}
+                  className="shrink-0 text-xs text-ink-600 hover:text-ink-200 transition"
+                >
+                  {q.active ? 'ปิด' : 'เปิด'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => deleteMut.mutate(q.id)}
+                  className="shrink-0 text-ink-600 hover:text-red-400 transition"
+                  title="Delete"
+                >
+                  <Trash2 size={13} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => toggleMut.mutate(q)}
-                className="text-xs text-ink-400 hover:text-ink-100"
-              >
-                {q.active ? 'ปิดใช้งาน' : 'เปิดใช้งาน'}
-              </button>
-              <button
-                type="button"
-                onClick={() => deleteMut.mutate(q.id)}
-                className="text-ink-500 hover:text-red-400"
-                title="Delete"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
     </div>

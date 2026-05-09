@@ -19,72 +19,96 @@ export default function EmployeeCard({
   const theme = latest ? ARCHETYPES[latest.archetype] : null
   const Icon = theme ? ICONS[theme.iconKey] : UserRound
 
-  const dim = size === 'lg' ? 'w-[320px] h-[460px]' : size === 'sm' ? 'w-[200px] h-[290px]' : 'w-[260px] h-[380px]'
+  const dim =
+    size === 'lg' ? 'w-[300px] h-[440px]' :
+    size === 'sm' ? 'w-[200px] h-[290px]' :
+    'w-[260px] h-[380px]'
 
   const inner = (
     <div
-      className={`${dim} relative overflow-hidden rounded-2xl shadow-card ring-1 ring-white/10`}
+      className={`${dim} relative overflow-hidden rounded-[20px]`}
       style={{
         background: theme
-          ? `linear-gradient(155deg, ${theme.primary}33 0%, rgba(2,6,23,0.95) 45%, rgba(2,6,23,1) 100%)`
-          : 'linear-gradient(155deg, rgba(100,116,139,0.25), rgba(2,6,23,1))',
-        boxShadow: theme ? `0 30px 70px -25px ${theme.glow}, 0 8px 28px -10px rgba(0,0,0,0.6)` : undefined,
+          ? `linear-gradient(160deg, ${theme.primary}28 0%, rgba(7,9,15,0.97) 42%, rgba(7,9,15,1) 100%)`
+          : 'linear-gradient(160deg, rgba(100,116,139,0.18), rgba(7,9,15,1))',
+        boxShadow: theme
+          ? `0 0 0 1px ${theme.primary}28, 0 28px 64px -20px ${theme.glow}, 0 8px 24px -8px rgba(0,0,0,0.7)`
+          : '0 0 0 1px rgba(255,255,255,0.07), 0 24px 48px -16px rgba(0,0,0,0.6)',
       }}
     >
-      {/* frame ornament */}
-      <div className="absolute inset-0 bg-card-frame" aria-hidden />
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* card frame light */}
+      <div className="absolute inset-0 bg-card-frame opacity-80" aria-hidden />
+      <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-      {/* header banner */}
-      <div className="relative flex items-center justify-between px-4 pt-3">
+      {/* archetype colour strip at top */}
+      {theme && (
         <div
-          className="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest"
+          className="absolute inset-x-0 top-0 h-0.5"
+          style={{ background: `linear-gradient(90deg, transparent, ${theme.primary}, transparent)` }}
+        />
+      )}
+
+      {/* header */}
+      <div className="relative flex items-center justify-between px-4 pt-4">
+        <div
+          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[9px] font-bold uppercase tracking-[0.12em]"
           style={{
-            backgroundColor: theme ? `${theme.primary}33` : 'rgba(100,116,139,0.3)',
-            color: theme?.primary || '#94A3B8',
+            backgroundColor: theme ? `${theme.primary}22` : 'rgba(100,116,139,0.2)',
+            color: theme?.primary || '#64748B',
+            boxShadow: theme ? `inset 0 0 0 1px ${theme.primary}33` : 'inset 0 0 0 1px rgba(255,255,255,0.06)',
           }}
         >
-          <Icon size={11} strokeWidth={3} />
+          <Icon size={10} strokeWidth={2.5} />
           {theme?.label || 'UNASSESSED'}
         </div>
-        <div className="font-display text-[11px] uppercase tracking-widest text-ink-400">
+        <div className="font-display text-[9px] font-semibold uppercase tracking-[0.12em] text-ink-600">
           {employee.department || '—'}
         </div>
       </div>
 
       {/* portrait */}
-      <div className="relative mx-4 mt-3 aspect-[4/3] overflow-hidden rounded-lg ring-1 ring-white/10">
+      <div className="relative mx-4 mt-3 aspect-[4/3] overflow-hidden rounded-[12px]"
+        style={{
+          boxShadow: theme
+            ? `0 0 0 1px ${theme.primary}33, inset 0 0 0 1px rgba(0,0,0,0.3)`
+            : '0 0 0 1px rgba(255,255,255,0.06)',
+        }}
+      >
         {employee.photoPath ? (
           <img src={employee.photoPath} alt={employee.fullName} className="h-full w-full object-cover" />
         ) : (
-          <div className="grid h-full w-full place-items-center bg-ink-900/80 text-ink-600">
-            <UserRound size={56} />
+          <div className="grid h-full w-full place-items-center bg-ink-900/90">
+            <UserRound size={52} className="text-ink-700" />
           </div>
         )}
         {theme && (
           <div
             className="pointer-events-none absolute inset-0 mix-blend-overlay"
-            style={{ background: `radial-gradient(circle at 50% 0%, ${theme.primary}55, transparent 65%)` }}
+            style={{ background: `radial-gradient(circle at 50% 0%, ${theme.primary}44, transparent 65%)` }}
           />
         )}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-ink-950/70 to-transparent" />
       </div>
 
-      {/* name */}
+      {/* name block */}
       <div className="px-4 pt-3">
-        <div className="font-display text-base font-bold leading-tight text-ink-50">{employee.fullName}</div>
-        <div className="text-[11px] text-ink-400">{employee.position}</div>
+        <div className="font-display text-[15px] font-bold leading-tight text-white">{employee.fullName}</div>
+        <div className="mt-0.5 text-[10px] font-medium text-ink-500">{employee.position}</div>
       </div>
 
-      {/* stats */}
-      <div className="space-y-2 px-4 pb-4 pt-3">
-        <StatBar label="Skill" value={latest?.skillScore ?? 0} color="#3B82F6" />
-        <StatBar label="Will" value={latest?.willScore ?? 0} color="#A855F7" />
+      {/* stat bars */}
+      <div className="space-y-2.5 px-4 pb-5 pt-3">
+        <StatBar label="Skill" value={latest?.skillScore ?? 0} color="#60A5FA" />
+        <StatBar label="Will"  value={latest?.willScore  ?? 0} color="#C084FC" />
       </div>
 
-      {/* footer flavor */}
+      {/* bottom tagline */}
       {theme && (
-        <div className="absolute inset-x-0 bottom-0 px-4 py-2 text-center text-[10px] uppercase tracking-[0.3em] text-ink-400">
+        <div
+          className="absolute inset-x-0 bottom-0 px-4 py-2 text-center text-[9px] uppercase tracking-[0.28em] font-semibold"
+          style={{ color: `${theme.primary}80` }}
+        >
           {theme.tagline}
         </div>
       )}

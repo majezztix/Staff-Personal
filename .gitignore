@@ -30,6 +30,9 @@ Thumbs.db
 # prisma
 server/prisma/migrations/dev.db*
 
+# UI/UX Pro Max skill (dev tool, installed locally via npx)
+.claude/
+
 # TypeScript build info
 *.tsbuildinfo
 

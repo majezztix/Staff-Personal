@@ -44,7 +44,7 @@ export default function Admins() {
 
   if (!isSuper) {
     return (
-      <div className="panel p-12 text-center text-ink-400">
+      <div className="panel p-12 text-center text-sm text-ink-600">
         ต้องเป็น Superadmin จึงจะจัดการ admin ได้
       </div>
     )
@@ -54,16 +54,20 @@ export default function Admins() {
     <div>
       <PageHeader title="Admins" subtitle="จัดการบัญชีผู้ใช้ที่เข้าใช้งานระบบ" />
 
-      <div className="panel p-6 mb-6">
-        <h2 className="font-display text-lg font-bold mb-4 text-ink-50">เพิ่ม Admin ใหม่</h2>
+      {/* Add form */}
+      <div className="panel p-6 mb-5">
+        <h2 className="font-display text-base font-bold mb-4 text-white">เพิ่ม Admin ใหม่</h2>
         <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            addMut.mutate()
-          }}
+          onSubmit={(e) => { e.preventDefault(); addMut.mutate() }}
           className="grid gap-3 md:grid-cols-[1fr,1fr,180px,auto]"
         >
-          <input className="input" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <input
+            className="input"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
           <input
             className="input"
             type="password"
@@ -78,67 +82,73 @@ export default function Admins() {
             <option value="SUPERADMIN">Super Admin</option>
           </select>
           <button className="btn-primary" disabled={addMut.isPending}>
-            {addMut.isPending ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} เพิ่ม
+            {addMut.isPending ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+            เพิ่ม
           </button>
         </form>
         {error && (
-          <div className="mt-3 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          <div className="mt-3 rounded-xl border border-red-500/20 bg-red-500/8 px-4 py-3 text-sm text-red-300">
             {error}
           </div>
         )}
-        <p className="mt-3 text-xs text-ink-500">Admin ใหม่จะถูกบังคับให้ตั้งค่า 2FA ในการ login ครั้งแรก</p>
+        <p className="mt-3 text-xs text-ink-600">Admin ใหม่จะถูกบังคับให้ตั้งค่า 2FA ในการ login ครั้งแรก</p>
       </div>
 
-      <div className="panel divide-y divide-white/5">
+      {/* Admin list */}
+      <div className="panel overflow-hidden">
         {isLoading ? (
-          <div className="p-6 text-ink-400">Loading...</div>
+          <div className="space-y-2 p-4">
+            {Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-16 rounded-xl" />)}
+          </div>
         ) : (
-          admins.map((a) => (
-            <div key={a.id} className="flex items-center gap-4 p-4">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-amber-500 via-purple-500 to-blue-500 font-display font-bold text-ink-950">
-                {a.username.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <div className="font-medium text-ink-100">
-                  {a.username}
-                  {a.id === myId && <span className="ml-2 text-xs text-amber-300">(คุณ)</span>}
+          <div className="divide-y divide-white/[0.05]">
+            {admins.map((a) => (
+              <div key={a.id} className="flex items-center gap-4 px-5 py-4 hover:bg-white/[0.02] transition">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-amber-400/30 via-purple-500/20 to-blue-500/20 ring-1 ring-white/10 font-display text-sm font-bold text-white">
+                  {a.username.charAt(0).toUpperCase()}
                 </div>
-                <div className="text-xs text-ink-500">
-                  สมาชิกตั้งแต่ {new Date(a.createdAt).toISOString().slice(0, 10)}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-ink-100">
+                    {a.username}
+                    {a.id === myId && (
+                      <span className="ml-2 text-[10px] font-bold text-amber-400">(คุณ)</span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-ink-600">
+                    สมาชิกตั้งแต่ {new Date(a.createdAt).toISOString().slice(0, 10)}
+                  </div>
                 </div>
+                <span className={`badge text-[10px] ${
+                  a.role === 'SUPERADMIN' ? 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30' : 'bg-white/[0.06] text-ink-400'
+                }`}>
+                  {a.role === 'SUPERADMIN' ? 'Super' : 'Admin'}
+                </span>
+                <span className={`badge text-[10px] ${
+                  a.totpEnabled ? 'bg-green-500/15 text-green-300' : 'bg-red-500/15 text-red-300'
+                }`}>
+                  {a.totpEnabled ? <ShieldCheck size={11} /> : <ShieldOff size={11} />}
+                  2FA
+                </span>
+                {a.id !== myId && (
+                  <>
+                    <button
+                      onClick={() => reset2faMut.mutate(a.id)}
+                      className="btn-ghost btn-sm text-ink-500 text-[11px]"
+                      title="Reset 2FA"
+                    >
+                      <KeyRound size={12} /> Reset 2FA
+                    </button>
+                    <button
+                      onClick={() => { if (confirm(`ลบ admin "${a.username}"?`)) deleteMut.mutate(a.id) }}
+                      className="text-ink-600 hover:text-red-400 transition p-1"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </>
+                )}
               </div>
-              <span
-                className={`badge ${
-                  a.role === 'SUPERADMIN' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/5 text-ink-300'
-                }`}
-              >
-                {a.role}
-              </span>
-              <span className={`badge ${a.totpEnabled ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
-                {a.totpEnabled ? <ShieldCheck size={12} /> : <ShieldOff size={12} />}
-                2FA
-              </span>
-              {a.id !== myId && (
-                <>
-                  <button
-                    onClick={() => reset2faMut.mutate(a.id)}
-                    className="btn-ghost text-xs"
-                    title="Reset 2FA — บังคับให้ตั้งค่า 2FA ใหม่"
-                  >
-                    <KeyRound size={14} /> Reset 2FA
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (confirm(`ลบ admin "${a.username}"?`)) deleteMut.mutate(a.id)
-                    }}
-                    className="text-ink-500 hover:text-red-400"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </>
-              )}
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
     </div>

@@ -101,27 +101,29 @@ export default function EmployeeForm() {
       />
 
       <form onSubmit={onSubmit} className="grid gap-6 md:grid-cols-[260px,1fr]">
-        <div className="panel p-4">
-          <div className="label">รูปภาพ</div>
+        {/* Photo panel */}
+        <div className="panel p-5">
+          <label className="label">รูปภาพ</label>
           <div
             onClick={() => fileRef.current?.click()}
-            className="relative flex aspect-[3/4] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed border-white/15 bg-ink-900/40 hover:bg-ink-900/60"
+            className="relative flex aspect-[3/4] cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] transition hover:bg-white/[0.04] hover:border-white/20"
           >
             {photoPreview ? (
               <img src={photoPreview} alt="preview" className="h-full w-full object-cover" />
             ) : (
-              <div className="flex flex-col items-center gap-2 text-ink-500">
+              <div className="flex flex-col items-center gap-3 text-ink-600">
                 <ImagePlus size={28} />
                 <div className="text-xs">คลิกเพื่อเลือกรูป</div>
               </div>
             )}
           </div>
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickPhoto} className="hidden" />
-          <p className="mt-2 text-[11px] text-ink-500">รองรับ JPG, PNG, WebP (≤ 5MB)</p>
+          <p className="mt-2.5 text-[11px] text-ink-600">รองรับ JPG, PNG, WebP (≤ 5MB)</p>
         </div>
 
-        <div className="panel p-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        {/* Fields panel */}
+        <div className="panel p-6 space-y-5">
+          <div className="grid grid-cols-2 gap-5">
             <div>
               <label className="label">ชื่อ-นามสกุล *</label>
               <input className="input" value={form.fullName} onChange={(e) => setField('fullName', e.target.value)} required />
@@ -146,27 +148,25 @@ export default function EmployeeForm() {
           <div>
             <label className="label">หมายเหตุ</label>
             <textarea
-              className="input min-h-[100px]"
+              className="input min-h-[100px] resize-none"
               value={form.notes}
               onChange={(e) => setField('notes', e.target.value)}
               placeholder="ข้อมูลเพิ่มเติม..."
             />
           </div>
           {error && (
-            <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+            <div className="rounded-xl border border-red-500/20 bg-red-500/8 px-4 py-3 text-sm text-red-300">
               {error}
             </div>
           )}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center justify-between pt-1">
             {isEdit ? (
-              <button type="button" onClick={onDelete} className="btn-ghost text-red-300 hover:bg-red-500/10">
+              <button type="button" onClick={onDelete} className="btn-ghost text-sm text-red-400/70 hover:bg-red-500/10 hover:text-red-300">
                 <Trash2 size={14} /> Archive
               </button>
-            ) : (
-              <span />
-            )}
+            ) : <span />}
             <button type="submit" className="btn-primary" disabled={busy}>
-              <Save size={16} /> บันทึก
+              <Save size={15} /> บันทึก
             </button>
           </div>
         </div>
