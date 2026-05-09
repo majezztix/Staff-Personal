@@ -16,10 +16,21 @@ export default function StatBar({
   return (
     <div className={clsx('w-full', className)}>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-500">{label}</span>
-        <span className="font-display text-xs font-bold tabular-nums" style={{ color }}>{value.toFixed(0)}</span>
+        <span
+          className="text-[10px] font-bold uppercase tracking-[0.12em]"
+          style={{ color: '#94A3B8' }}
+        >
+          {label}
+        </span>
+        <span className="font-display text-xs font-bold tabular-nums" style={{ color }}>
+          {value.toFixed(0)}
+        </span>
       </div>
-      <div className="relative h-1.5 overflow-hidden rounded-full bg-ink-800/80">
+      {/* Progress track — fixed dark color so it reads inside the always-dark card */}
+      <div
+        className="relative h-1.5 overflow-hidden rounded-full"
+        style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+      >
         <motion.div
           className="absolute inset-y-0 left-0 rounded-full"
           style={{
@@ -31,8 +42,8 @@ export default function StatBar({
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         />
         <div
-          className="pointer-events-none absolute inset-y-0 w-px bg-white/15"
-          style={{ left: '50%' }}
+          className="pointer-events-none absolute inset-y-0 w-px"
+          style={{ left: '50%', backgroundColor: 'rgba(255,255,255,0.18)' }}
           aria-hidden
         />
       </div>

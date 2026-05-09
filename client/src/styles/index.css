@@ -51,6 +51,9 @@
   --sidebar-glow:
     radial-gradient(ellipse 80% 30% at 50% 0%,   rgba(245,158,11,0.06), transparent),
     radial-gradient(ellipse 60% 30% at 50% 100%, rgba(168,85,247,0.05), transparent);
+
+  /* Recessed tile end-stop for archetype/KPI tiles that nest in a panel */
+  --tile-bg-end: rgba(7, 9, 15, 0.55);
 }
 
 :root.light {
@@ -95,6 +98,10 @@
   --sidebar-glow:
     radial-gradient(ellipse 80% 30% at 50% 0%,   rgba(245,158,11,0.05), transparent),
     radial-gradient(ellipse 60% 30% at 50% 100%, rgba(168,85,247,0.04), transparent);
+
+  /* Tiles in light mode use a soft slate end-stop instead of dark navy
+     so text-white can flip to dark text and stay legible. */
+  --tile-bg-end: rgba(15, 23, 42, 0.04);
 }
 
 @layer base {
@@ -309,6 +316,19 @@
   .border-dashed.border-white\/\[0\.06\],
   .border-dashed.border-white\/\[0\.07\] {
     border-color: rgba(15, 23, 42, 0.18);
+  }
+
+  /* `text-white` and `text-[#FFFFFF]` are invisible on white surfaces.
+     Map them to the primary ink color so existing components stay
+     legible without per-file edits. Components that genuinely need
+     white text on a dark gradient (employee cards, archetype banners)
+     opt back in via inline style or `dark:text-white`. */
+  .text-white { color: rgb(var(--ink-50)); }
+
+  /* Divider lines were invisible on white */
+  .divide-white\/\[0\.05\] > :not([hidden]) ~ :not([hidden]),
+  .divide-white\/\[0\.06\] > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(15, 23, 42, 0.08);
   }
 
   /* Recessed surfaces (form inputs, progress tracks, frame bgs).

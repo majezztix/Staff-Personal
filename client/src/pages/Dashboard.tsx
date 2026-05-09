@@ -171,7 +171,7 @@ export default function Dashboard() {
                 transition={{ delay: i * 0.04 }}
                 className="rounded-xl border border-white/[0.06] p-4"
                 style={{
-                  background: `linear-gradient(155deg, ${t.primary}1A 0%, rgba(7,9,15,0.6) 100%)`,
+                  background: `linear-gradient(155deg, ${t.primary}1A 0%, var(--tile-bg-end) 100%)`,
                 }}
               >
                 <div className="mb-2 flex items-center justify-between">

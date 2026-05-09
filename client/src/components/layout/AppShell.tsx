@@ -67,7 +67,7 @@ export default function AppShell() {
         <div className="relative px-5 py-6">
           <div className="flex items-center gap-3">
             <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-amber-400 via-fuchsia-500 to-blue-500 shadow-[0_0_20px_-4px_rgba(245,158,11,0.5)]">
-              <span className="font-display text-base font-bold text-white drop-shadow-sm">T</span>
+              <span className="font-display text-base font-bold drop-shadow-sm" style={{ color: '#FFFFFF' }}>T</span>
             </div>
             <div>
               <div className="font-display text-[17px] font-bold leading-none tracking-wide text-white">

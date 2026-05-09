@@ -54,7 +54,7 @@ export default function Login() {
           {/* Logo */}
           <div className="mb-8 flex items-center gap-3.5">
             <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-amber-400 via-fuchsia-500 to-blue-500 shadow-[0_0_28px_-6px_rgba(245,158,11,0.55)]">
-              <Zap size={20} className="text-white" />
+              <Zap size={20} style={{ color: '#FFFFFF' }} />
             </div>
             <div>
               <div className="font-display text-2xl font-bold text-white">TAS Cards</div>

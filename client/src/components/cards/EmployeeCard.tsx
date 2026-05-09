@@ -3,7 +3,7 @@ import { Sun, Compass, Flame, Shield, UserRound } from 'lucide-react'
 import type { Employee } from '../../api/client'
 import { ARCHETYPES } from '../../lib/archetypes'
 import StatBar from './StatBar'
-import CardTilt from './CardTilt'
+import CardHover from './CardHover'
 
 const ICONS = { sun: Sun, compass: Compass, flame: Flame, shield: Shield }
 
@@ -56,15 +56,15 @@ const EmployeeCard = memo(function EmployeeCard({
         <div
           className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[9px] font-bold uppercase tracking-[0.12em]"
           style={{
-            backgroundColor: theme ? `${theme.primary}22` : 'rgba(100,116,139,0.2)',
-            color: theme?.primary || '#64748B',
-            boxShadow: theme ? `inset 0 0 0 1px ${theme.primary}33` : 'inset 0 0 0 1px rgba(255,255,255,0.06)',
+            backgroundColor: theme ? `${theme.primary}22` : 'rgba(100,116,139,0.25)',
+            color: theme?.primary || '#94A3B8',
+            boxShadow: theme ? `inset 0 0 0 1px ${theme.primary}33` : 'inset 0 0 0 1px rgba(255,255,255,0.08)',
           }}
         >
           <Icon size={10} strokeWidth={2.5} />
           {theme?.label || 'UNASSESSED'}
         </div>
-        <div className="font-display text-[9px] font-semibold uppercase tracking-[0.12em] text-ink-600">
+        <div className="font-display text-[9px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#64748B' }}>
           {employee.department || '—'}
         </div>
       </div>
@@ -93,10 +93,14 @@ const EmployeeCard = memo(function EmployeeCard({
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-ink-950/70 to-transparent" />
       </div>
 
-      {/* name block */}
+      {/* name block — card stays dark in both themes; force white text */}
       <div className="px-4 pt-3">
-        <div className="font-display text-[15px] font-bold leading-tight text-white">{employee.fullName}</div>
-        <div className="mt-0.5 text-[10px] font-medium text-ink-500">{employee.position}</div>
+        <div className="font-display text-[15px] font-bold leading-tight" style={{ color: '#FFFFFF' }}>
+          {employee.fullName}
+        </div>
+        <div className="mt-0.5 text-[10px] font-medium" style={{ color: '#94A3B8' }}>
+          {employee.position}
+        </div>
       </div>
 
       {/* stat bars */}
@@ -118,7 +122,11 @@ const EmployeeCard = memo(function EmployeeCard({
   )
 
   if (!interactive) return inner
-  return <CardTilt className={dim}>{inner}</CardTilt>
+  return (
+    <CardHover className={dim} glowColor={theme?.primary}>
+      {inner}
+    </CardHover>
+  )
 })
 
 export default EmployeeCard

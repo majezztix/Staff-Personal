@@ -239,7 +239,7 @@ export default function PublicAssessment() {
               >
                 {current.axis === 'SKILL' ? '⚡ Skill Axis' : '🔥 Will Axis'}
               </div>
-              <p className="font-display text-2xl font-bold leading-relaxed text-white">{current.text}</p>
+              <p className="font-display text-2xl font-bold leading-relaxed" style={{ color: '#FFFFFF' }}>{current.text}</p>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -299,7 +299,10 @@ function PublicShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen px-5 py-10 sm:px-8 md:py-16">
       <div className="mx-auto mb-10 flex max-w-3xl items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-purple-500 to-blue-500 font-display text-base font-bold text-white">
+        <div
+          className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-amber-500 via-purple-500 to-blue-500 font-display text-base font-bold"
+          style={{ color: '#FFFFFF' }}
+        >
           T
         </div>
         <div>

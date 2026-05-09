@@ -147,7 +147,7 @@ export default function Assessment() {
               >
                 {current.axis === 'SKILL' ? '⚡ Skill Axis' : '🔥 Will Axis'}
               </div>
-              <p className="font-display text-2xl font-bold leading-relaxed text-white">
+              <p className="font-display text-2xl font-bold leading-relaxed" style={{ color: '#FFFFFF' }}>
                 {current.text}
               </p>
             </div>

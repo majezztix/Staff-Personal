@@ -111,11 +111,11 @@ export default function Questions() {
                 className={`flex items-start gap-3 px-4 py-3.5 transition hover:bg-white/[0.02] ${!q.active ? 'opacity-40' : ''}`}
               >
                 <span
-                  className="mt-0.5 inline-flex w-14 shrink-0 justify-center rounded-lg px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-                  style={{
-                    backgroundColor: q.axis === 'SKILL' ? '#3B82F620' : '#A855F720',
-                    color: q.axis === 'SKILL' ? '#60A5FA' : '#C084FC',
-                  }}
+                  className={`mt-0.5 inline-flex w-14 shrink-0 justify-center rounded-lg px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                    q.axis === 'SKILL'
+                      ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300'
+                      : 'bg-purple-500/15 text-purple-700 dark:text-purple-300'
+                  }`}
                 >
                   {q.axis}
                 </span>
