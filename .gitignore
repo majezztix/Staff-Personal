@@ -39,3 +39,8 @@ server/prisma/migrations/dev.db*
 # Compiled vite config (generated from vite.config.ts)
 client/vite.config.js
 client/vite.config.d.ts
+
+# Agent skills installed locally (dev tooling, not project code)
+.agents/
+.claude/
+skills-lock.json

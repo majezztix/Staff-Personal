@@ -79,7 +79,7 @@ export default function QuadrantPlot({ points }: { points: QuadrantPoint[] }) {
               key={p.id}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.04, type: 'spring', stiffness: 200 }}
+              transition={{ delay: Math.min(i * 0.04, 0.4), type: 'spring', stiffness: 200 }}
               className="group absolute -translate-x-1/2 translate-y-1/2"
               style={{
                 left: `${p.x}%`,
@@ -88,9 +88,8 @@ export default function QuadrantPlot({ points }: { points: QuadrantPoint[] }) {
             >
               <Link to={`/employees/${p.id}`}>
                 <div
-                  className="relative h-10 w-10 overflow-hidden rounded-full ring-2 transition-transform group-hover:scale-125 group-hover:z-10"
+                  className="relative h-10 w-10 overflow-hidden rounded-full transition-transform group-hover:scale-125 group-hover:z-10"
                   style={{
-                    borderColor: t.primary,
                     boxShadow: `0 0 0 2px ${t.primary}, 0 0 20px ${t.primary}66`,
                   }}
                 >

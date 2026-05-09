@@ -10,6 +10,7 @@ import Roster from './pages/Roster'
 import EmployeeDetail from './pages/EmployeeDetail'
 import EmployeeForm from './pages/EmployeeForm'
 import Assessment from './pages/Assessment'
+import PublicAssessment from './pages/PublicAssessment'
 import Analytics from './pages/Analytics'
 import Questions from './pages/Questions'
 import Admins from './pages/Admins'
@@ -34,6 +35,9 @@ export default function App() {
 
   return (
     <Routes>
+      {/* Public — no auth required, no admin chrome */}
+      <Route path="/take/:token" element={<PublicAssessment />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/setup-2fa" element={<Setup2FA />} />
       <Route path="/verify-2fa" element={<Verify2FA />} />

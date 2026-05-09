@@ -4,19 +4,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { ArrowLeft, Pencil, Sparkles, Loader2, Download, Play, RotateCw, Calendar } from 'lucide-react'
+import { ArrowLeft, Pencil, Sparkles, Loader2, Download, Play, RotateCw, Calendar, Send } from 'lucide-react'
 import { api, type Employee, type Assessment } from '../api/client'
 import EmployeeCard from '../components/cards/EmployeeCard'
 import ArchetypeBadge from '../components/cards/ArchetypeBadge'
 import PageHeader from '../components/layout/PageHeader'
 import { ARCHETYPES } from '../lib/archetypes'
 import StatBar from '../components/cards/StatBar'
+import SendInviteModal from '../components/SendInviteModal'
 
 export default function EmployeeDetail() {
   const { id } = useParams()
   const qc = useQueryClient()
   const [aiBusy, setAiBusy] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const { data: employee, isLoading } = useQuery({
     queryKey: ['employee', id],
@@ -72,8 +74,11 @@ export default function EmployeeDetail() {
             <Link to={`/employees/${employee.id}/edit`} className="btn-secondary">
               <Pencil size={15} /> แก้ไข
             </Link>
+            <button onClick={() => setInviteOpen(true)} className="btn-secondary">
+              <Send size={15} /> ส่งลิงก์ประเมิน
+            </button>
             <Link to={`/employees/${employee.id}/assess`} className="btn-primary">
-              <Play size={15} /> ประเมิน
+              <Play size={15} /> ประเมินด้วยตัวเอง
             </Link>
           </>
         }
@@ -204,6 +209,13 @@ export default function EmployeeDetail() {
           )}
         </div>
       </div>
+
+      <SendInviteModal
+        open={inviteOpen}
+        onClose={() => setInviteOpen(false)}
+        employeeId={employee.id}
+        employeeName={employee.fullName}
+      />
     </div>
   )
 }

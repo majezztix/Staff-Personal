@@ -54,7 +54,8 @@ export type Assessment = {
   willScore: number
   aiPlan: string | null
   notes: string | null
-  takenBy?: { id: string; username: string }
+  source?: 'ADMIN' | 'SELF'
+  takenBy?: { id: string; username: string } | null
 }
 
 export type Admin = {
@@ -63,4 +64,22 @@ export type Admin = {
   role: AdminRole
   totpEnabled: boolean
   createdAt: string
+}
+
+export type AssessmentToken = {
+  id: string
+  token: string
+  employeeId: string
+  createdById: string
+  createdAt: string
+  expiresAt: string
+  usedAt: string | null
+  revoked: boolean
+  employee?: {
+    id: string
+    fullName: string
+    email: string | null
+    department: string
+    position: string
+  }
 }

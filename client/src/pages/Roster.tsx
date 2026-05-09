@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { Plus, Search, Download, LayoutGrid } from 'lucide-react'
+import { Plus, Search, Download, LayoutGrid, FileDown } from 'lucide-react'
 import { api, type Employee, type Archetype } from '../api/client'
 import EmployeeCard from '../components/cards/EmployeeCard'
 import PageHeader from '../components/layout/PageHeader'
@@ -34,6 +34,9 @@ export default function Roster() {
         subtitle="ทีมของคุณในรูปแบบสำรับการ์ด"
         actions={
           <>
+            <a className="btn-secondary" href="/api/export/roster.pdf" target="_blank" rel="noreferrer">
+              <FileDown size={15} /> PDF
+            </a>
             <a className="btn-secondary" href="/api/export/employees.xlsx" download>
               <Download size={15} /> XLSX
             </a>
@@ -107,7 +110,7 @@ export default function Roster() {
               key={e.id}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: Math.min(i * 0.04, 0.4), ease: [0.16, 1, 0.3, 1] }}
             >
               <Link
                 to={`/employees/${e.id}`}

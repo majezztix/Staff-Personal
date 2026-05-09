@@ -12,6 +12,8 @@ import adminRoutes from './routes/admin.routes.js'
 import employeeRoutes from './routes/employee.routes.js'
 import questionRoutes from './routes/question.routes.js'
 import assessmentRoutes from './routes/assessment.routes.js'
+import assessmentTokenRoutes from './routes/assessment-token.routes.js'
+import publicRoutes from './routes/public.routes.js'
 import analyticsRoutes from './routes/analytics.routes.js'
 import aiRoutes from './routes/ai.routes.js'
 import exportRoutes from './routes/export.routes.js'
@@ -49,11 +51,13 @@ app.use('/uploads', express.static(path.resolve(env.UPLOAD_DIR)))
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
+app.use('/api/public', publicRoutes)             // public, no auth
 app.use('/api/auth', authRoutes)
 app.use('/api/admins', adminRoutes)
 app.use('/api/employees', employeeRoutes)
 app.use('/api/questions', questionRoutes)
 app.use('/api/assessments', assessmentRoutes)
+app.use('/api/assessment-tokens', assessmentTokenRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/ai', aiRoutes)
 app.use('/api/export', exportRoutes)

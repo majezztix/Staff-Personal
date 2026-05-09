@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Sun, Compass, Flame, Shield, UserRound } from 'lucide-react'
 import type { Employee } from '../../api/client'
 import { ARCHETYPES } from '../../lib/archetypes'
@@ -6,7 +7,8 @@ import CardTilt from './CardTilt'
 
 const ICONS = { sun: Sun, compass: Compass, flame: Flame, shield: Shield }
 
-export default function EmployeeCard({
+// FIX #3: Wrap in React.memo — pure component; only re-renders when employee prop changes
+const EmployeeCard = memo(function EmployeeCard({
   employee,
   size = 'md',
   interactive = true,
@@ -117,4 +119,6 @@ export default function EmployeeCard({
 
   if (!interactive) return inner
   return <CardTilt className={dim}>{inner}</CardTilt>
-}
+})
+
+export default EmployeeCard

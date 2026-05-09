@@ -37,18 +37,19 @@ model Admin {
 }
 
 model Employee {
-  id          String       @id @default(cuid())
+  id          String            @id @default(cuid())
   fullName    String
-  email       String?      @unique
+  email       String?           @unique
   position    String
   department  String
   startDate   DateTime?
   photoPath   String?
   notes       String?
   archivedAt  DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   assessments Assessment[]
+  tokens      AssessmentToken[]
 
   @@index([department])
   @@index([archivedAt])
@@ -67,20 +68,44 @@ model Question {
 }
 
 model Assessment {
-  id         String    @id @default(cuid())
-  employeeId String
-  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  takenAt    DateTime  @default(now())
-  takenById  String
-  takenBy    Admin     @relation("AssessmentTakenBy", fields: [takenById], references: [id])
-  skillScore Float
-  willScore  Float
-  archetype  Archetype
-  rawAnswers Json
-  aiPlan     String?
-  notes      String?
+  id           String           @id @default(cuid())
+  employeeId   String
+  employee     Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  takenAt      DateTime         @default(now())
+  takenById    String?
+  takenBy      Admin?           @relation("AssessmentTakenBy", fields: [takenById], references: [id])
+  source       AssessmentSource @default(ADMIN)
+  skillScore   Float
+  willScore    Float
+  archetype    Archetype
+  rawAnswers   Json
+  aiPlan       String?
+  notes        String?
+  tokenId      String?
+  token        AssessmentToken? @relation(fields: [tokenId], references: [id])
 
   @@index([employeeId, takenAt])
+}
+
+enum AssessmentSource {
+  ADMIN
+  SELF
+}
+
+model AssessmentToken {
+  id            String       @id @default(cuid())
+  token         String       @unique
+  employeeId    String
+  employee      Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  createdById   String
+  createdAt     DateTime     @default(now())
+  expiresAt     DateTime
+  usedAt        DateTime?
+  revoked       Boolean      @default(false)
+  assessments   Assessment[]
+
+  @@index([employeeId])
+  @@index([token])
 }
 
 // connect-pg-simple's session table is created manually in prisma/seed.ts
