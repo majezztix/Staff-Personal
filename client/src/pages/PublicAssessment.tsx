@@ -255,10 +255,10 @@ export default function PublicAssessment() {
                 onClick={() => pick(l.value)}
                 className="relative overflow-hidden rounded-xl px-2 py-4 text-center transition-all"
                 style={{
-                  backgroundColor: selected ? `${l.color}22` : 'rgba(255,255,255,0.03)',
+                  backgroundColor: selected ? `${l.color}22` : 'var(--overlay-soft)',
                   boxShadow: selected
                     ? `0 0 0 2px ${l.color}, 0 8px 24px -8px ${l.color}66`
-                    : 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+                    : 'inset 0 0 0 1px var(--panel-border)',
                 }}
               >
                 <div className="font-display text-2xl font-bold" style={{ color: l.color }}>

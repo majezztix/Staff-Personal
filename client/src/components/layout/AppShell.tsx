@@ -48,14 +48,18 @@ export default function AppShell() {
   return (
     <div className="flex min-h-screen">
       {/* ── Sidebar ───────────────────────────────────── */}
-      <aside className="relative flex w-64 shrink-0 flex-col border-r border-white/[0.06] bg-ink-950/85 backdrop-blur-xl">
+      <aside
+        className="relative flex w-64 shrink-0 flex-col border-r backdrop-blur-xl"
+        style={{
+          background: 'var(--sidebar-bg)',
+          borderColor: 'var(--sidebar-border)',
+          boxShadow: 'var(--sidebar-shadow)',
+        }}
+      >
         {/* Ambient glow */}
         <div
           className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 80% 30% at 50% 0%, rgba(245,158,11,0.06), transparent), radial-gradient(ellipse 60% 30% at 50% 100%, rgba(168,85,247,0.05), transparent)',
-          }}
+          style={{ background: 'var(--sidebar-glow)' }}
           aria-hidden
         />
 
@@ -103,10 +107,10 @@ export default function AppShell() {
         <div className="relative border-t border-[color:var(--panel-border)] p-3">
           <div className="flex items-center gap-2.5 rounded-xl border border-[color:var(--panel-border)] bg-[color:var(--overlay-soft)] p-2.5">
             <div
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-xs font-bold text-amber-100"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-xs font-bold text-amber-700 dark:text-amber-100"
               style={{
-                background: 'linear-gradient(135deg, rgba(245,158,11,0.2), rgba(168,85,247,0.15))',
-                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.07)',
+                background: 'linear-gradient(135deg, rgba(245,158,11,0.22), rgba(168,85,247,0.18))',
+                boxShadow: 'inset 0 0 0 1px var(--panel-border)',
               }}
             >
               {username?.charAt(0).toUpperCase()}
@@ -114,7 +118,7 @@ export default function AppShell() {
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold text-ink-100">{username}</div>
               <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-ink-500">
-                {isSuper && <Sparkles size={9} className="text-amber-400" />}
+                {isSuper && <Sparkles size={9} className="text-amber-500 dark:text-amber-400" />}
                 {isSuper ? 'Super Admin' : 'Admin'}
               </div>
             </div>
@@ -123,7 +127,7 @@ export default function AppShell() {
                 await logout()
                 navigate('/login', { replace: true })
               }}
-              className="grid h-7 w-7 place-items-center rounded-md text-ink-500 transition hover:bg-red-500/10 hover:text-red-300"
+              className="grid h-7 w-7 place-items-center rounded-md text-ink-500 transition hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300"
               title="ออกจากระบบ"
             >
               <LogOut size={13} />
@@ -152,7 +156,7 @@ function NavRow({ item }: { item: NavItem }) {
         clsx(
           'group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium transition-all duration-150',
           isActive
-            ? 'bg-amber-500/10 text-amber-200 ring-1 ring-amber-400/15'
+            ? 'bg-amber-500/10 text-amber-700 ring-1 ring-amber-500/30 dark:text-amber-200 dark:ring-amber-400/15'
             : 'text-ink-400 hover:bg-white/[0.04] hover:text-ink-100'
         )
       }

@@ -44,6 +44,13 @@
 
   --scroll-thumb: rgba(255, 255, 255, 0.12);
   --scroll-thumb-hover: rgba(255, 255, 255, 0.22);
+
+  --sidebar-bg: rgba(7, 9, 15, 0.85);
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-shadow: none;
+  --sidebar-glow:
+    radial-gradient(ellipse 80% 30% at 50% 0%,   rgba(245,158,11,0.06), transparent),
+    radial-gradient(ellipse 60% 30% at 50% 100%, rgba(168,85,247,0.05), transparent);
 }
 
 :root.light {
@@ -62,24 +69,32 @@
   --ink-900: 241 245 249;
   --ink-950: 248 250 252;  /* lightest "950" = page background */
 
-  --bg-base: #F8FAFC;
-  --bg-grad-1: rgba(168, 85, 247, 0.08);
-  --bg-grad-2: rgba(59, 130, 246, 0.07);
-  --bg-grad-3: rgba(245, 158, 11, 0.06);
+  --bg-base: #F4F6FB;
+  --bg-grad-1: rgba(168, 85, 247, 0.07);
+  --bg-grad-2: rgba(59, 130, 246, 0.06);
+  --bg-grad-3: rgba(245, 158, 11, 0.05);
 
-  --panel-bg: rgba(255, 255, 255, 0.85);
-  --panel-border: rgba(15, 23, 42, 0.08);
+  --panel-bg: rgba(255, 255, 255, 0.92);
+  --panel-border: rgba(15, 23, 42, 0.09);
   --panel-shadow:
-    0 1px 0 rgba(255,255,255,0.6) inset,
-    0 1px 3px rgba(15,23,42,0.06),
-    0 8px 24px -10px rgba(15,23,42,0.10);
+    0 1px 0 rgba(255,255,255,0.7) inset,
+    0 1px 2px rgba(15,23,42,0.05),
+    0 8px 24px -12px rgba(15,23,42,0.12);
 
   --overlay-soft: rgba(15, 23, 42, 0.03);
   --overlay-medium: rgba(15, 23, 42, 0.06);
   --overlay-strong: rgba(15, 23, 42, 0.10);
 
-  --scroll-thumb: rgba(15, 23, 42, 0.15);
-  --scroll-thumb-hover: rgba(15, 23, 42, 0.30);
+  --scroll-thumb: rgba(15, 23, 42, 0.18);
+  --scroll-thumb-hover: rgba(15, 23, 42, 0.32);
+
+  /* Sidebar: warm off-white that visually separates from the page bg */
+  --sidebar-bg: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.92));
+  --sidebar-border: rgba(15, 23, 42, 0.10);
+  --sidebar-shadow: 1px 0 0 rgba(15,23,42,0.04), 4px 0 24px -16px rgba(15,23,42,0.10);
+  --sidebar-glow:
+    radial-gradient(ellipse 80% 30% at 50% 0%,   rgba(245,158,11,0.05), transparent),
+    radial-gradient(ellipse 60% 30% at 50% 100%, rgba(168,85,247,0.04), transparent);
 }
 
 @layer base {
@@ -140,19 +155,20 @@
     box-shadow: 0 0 0 1px rgba(252,211,77,0.6), 0 6px 24px -4px rgba(245,158,11,0.55);
   }
   .btn-secondary {
-    @apply btn border text-ink-100
-           focus:ring-amber-400/40;
+    @apply btn border text-ink-100;
     background-color: var(--overlay-soft);
     border-color: var(--panel-border);
   }
+  .btn-secondary:focus { --tw-ring-color: rgba(245, 158, 11, 0.4); }
   .btn-secondary:hover {
     background-color: var(--overlay-medium);
     border-color: var(--overlay-strong);
     color: rgb(var(--ink-50));
   }
   .btn-ghost {
-    @apply btn text-ink-300 focus:ring-amber-400/40;
+    @apply btn text-ink-300;
   }
+  .btn-ghost:focus { --tw-ring-color: rgba(245, 158, 11, 0.4); }
   .btn-ghost:hover {
     background-color: var(--overlay-soft);
     color: rgb(var(--ink-50));
@@ -170,12 +186,14 @@
     @apply w-full rounded-xl border px-3.5 py-2.5
            text-ink-50 placeholder:text-ink-600
            transition-all duration-200
-           focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/20;
+           focus:outline-none focus:ring-2;
     background-color: var(--overlay-soft);
     border-color: var(--panel-border);
   }
   .input:focus {
     background-color: var(--overlay-medium);
+    border-color: rgba(245, 158, 11, 0.6);
+    --tw-ring-color: rgba(245, 158, 11, 0.25);
   }
 
   .label {
@@ -202,6 +220,118 @@
     @apply animate-pulse rounded-lg;
     background-color: var(--overlay-medium);
   }
+}
+
+/* ─── Light-mode overrides ──────────────────────────────────────────
+   The codebase has many `bg-white/[0.0X]` and `border-white/[0.0X]`
+   utilities that work on dark surfaces but vanish on white. Flip them
+   to dark overlays in light mode so existing components keep working
+   without per-file edits. */
+:root.light {
+
+  /* White surface overlays → dark surface overlays */
+  .bg-white\/\[0\.02\]  { background-color: rgba(15, 23, 42, 0.025); }
+  .bg-white\/\[0\.03\]  { background-color: rgba(15, 23, 42, 0.035); }
+  .bg-white\/\[0\.04\]  { background-color: rgba(15, 23, 42, 0.045); }
+  .bg-white\/\[0\.05\]  { background-color: rgba(15, 23, 42, 0.055); }
+  .bg-white\/\[0\.06\]  { background-color: rgba(15, 23, 42, 0.065); }
+  .bg-white\/\[0\.07\]  { background-color: rgba(15, 23, 42, 0.075); }
+  .bg-white\/\[0\.08\]  { background-color: rgba(15, 23, 42, 0.085); }
+  .bg-white\/\[0\.10\]  { background-color: rgba(15, 23, 42, 0.10);  }
+  .bg-white\/5          { background-color: rgba(15, 23, 42, 0.05);  }
+  .bg-white\/10         { background-color: rgba(15, 23, 42, 0.07);  }
+  .bg-white\/15         { background-color: rgba(15, 23, 42, 0.09);  }
+  .bg-white\/20         { background-color: rgba(15, 23, 42, 0.11);  }
+
+  /* hover variants too */
+  .hover\:bg-white\/\[0\.04\]:hover { background-color: rgba(15, 23, 42, 0.05); }
+  .hover\:bg-white\/\[0\.05\]:hover { background-color: rgba(15, 23, 42, 0.06); }
+  .hover\:bg-white\/\[0\.06\]:hover { background-color: rgba(15, 23, 42, 0.07); }
+  .hover\:bg-white\/\[0\.08\]:hover { background-color: rgba(15, 23, 42, 0.09); }
+  .hover\:bg-white\/\[0\.09\]:hover { background-color: rgba(15, 23, 42, 0.10); }
+
+  /* White borders → dark borders */
+  .border-white\/\[0\.05\] { border-color: rgba(15, 23, 42, 0.07); }
+  .border-white\/\[0\.06\] { border-color: rgba(15, 23, 42, 0.08); }
+  .border-white\/\[0\.07\] { border-color: rgba(15, 23, 42, 0.09); }
+  .border-white\/\[0\.08\] { border-color: rgba(15, 23, 42, 0.10); }
+  .border-white\/\[0\.09\] { border-color: rgba(15, 23, 42, 0.11); }
+  .border-white\/\[0\.1\]  { border-color: rgba(15, 23, 42, 0.12); }
+  .border-white\/\[0\.10\] { border-color: rgba(15, 23, 42, 0.12); }
+  .border-white\/5  { border-color: rgba(15, 23, 42, 0.07); }
+  .border-white\/10 { border-color: rgba(15, 23, 42, 0.10); }
+  .border-white\/20 { border-color: rgba(15, 23, 42, 0.14); }
+  .hover\:border-white\/\[0\.15\]:hover { border-color: rgba(15, 23, 42, 0.16); }
+
+  /* Accent text — pale-on-dark shades become illegible on white.
+     Map "300/400" tones to darker "700/600" tones with proper contrast. */
+  .text-amber-100  { color: #92400E; }
+  .text-amber-200  { color: #92400E; }
+  .text-amber-300  { color: #B45309; }
+  .text-amber-400  { color: #B45309; }
+  .text-blue-300   { color: #1D4ED8; }
+  .text-blue-400   { color: #1D4ED8; }
+  .text-purple-300 { color: #7E22CE; }
+  .text-purple-400 { color: #7E22CE; }
+  .text-red-300    { color: #B91C1C; }
+  .text-red-400    { color: #B91C1C; }
+  .text-emerald-300 { color: #047857; }
+  .text-fuchsia-300 { color: #A21CAF; }
+
+  /* Tinted backgrounds with low alpha read as nothing on white. Bump them. */
+  .bg-amber-500\/10   { background-color: rgba(245, 158, 11, 0.16); }
+  .bg-amber-500\/15   { background-color: rgba(245, 158, 11, 0.20); }
+  .bg-amber-500\/20   { background-color: rgba(245, 158, 11, 0.24); }
+  .bg-blue-500\/10    { background-color: rgba(59, 130, 246, 0.14); }
+  .bg-blue-500\/15    { background-color: rgba(59, 130, 246, 0.18); }
+  .bg-purple-500\/10  { background-color: rgba(168, 85, 247, 0.14); }
+  .bg-purple-500\/15  { background-color: rgba(168, 85, 247, 0.18); }
+  .bg-purple-500\/20  { background-color: rgba(168, 85, 247, 0.20); }
+  .bg-red-500\/10     { background-color: rgba(239, 68, 68, 0.13); }
+  .bg-red-500\/15     { background-color: rgba(239, 68, 68, 0.17); }
+  .bg-emerald-500\/15 { background-color: rgba(16, 185, 129, 0.18); }
+
+  /* Borders that key off accent rings */
+  .border-red-500\/30  { border-color: rgba(239, 68, 68, 0.45); }
+  .border-red-500\/20  { border-color: rgba(239, 68, 68, 0.35); }
+  .border-amber-400\/20 { border-color: rgba(245, 158, 11, 0.40); }
+  .border-amber-400\/15 { border-color: rgba(245, 158, 11, 0.35); }
+
+  /* Buttons: secondary/ghost get visible borders + readable text on light */
+  .btn-secondary {
+    color: rgb(var(--ink-200));
+  }
+  .btn-secondary:hover {
+    color: rgb(var(--ink-50));
+  }
+
+  /* The dashed "empty state" border was nearly invisible on white */
+  .border-dashed.border-white\/\[0\.06\],
+  .border-dashed.border-white\/\[0\.07\] {
+    border-color: rgba(15, 23, 42, 0.18);
+  }
+
+  /* Recessed surfaces (form inputs, progress tracks, frame bgs).
+     `bg-ink-900/X` resolves to near-page-color in light, so override
+     to subtle dark tints that read as "slightly recessed". */
+  .bg-ink-800\/80  { background-color: rgba(15, 23, 42, 0.06); }
+  .bg-ink-900\/40  { background-color: rgba(15, 23, 42, 0.04); }
+  .bg-ink-900\/60  { background-color: rgba(15, 23, 42, 0.05); }
+  .bg-ink-900\/80  { background-color: rgba(15, 23, 42, 0.06); }
+  .bg-ink-900\/90  { background-color: rgba(15, 23, 42, 0.07); }
+  .bg-ink-950\/40  { background-color: rgba(15, 23, 42, 0.03); }
+  .bg-ink-950\/60  { background-color: rgba(15, 23, 42, 0.04); }
+  .bg-ink-950\/80  { background-color: rgba(15, 23, 42, 0.05); }
+  .bg-ink-950\/85  { background-color: rgba(255, 255, 255, 0.85); } /* sidebar */
+
+  /* Strong dropdowns/tooltips need a real opaque dark on light too */
+  .bg-ink-900       { background-color: #F1F5F9; }   /* tooltip bg in light */
+
+  /* Focus rings sized for dark mode; brighten on light for visibility */
+  .focus\:ring-amber-400\/20:focus { --tw-ring-color: rgba(245, 158, 11, 0.45); }
+  .focus\:ring-amber-400\/40:focus { --tw-ring-color: rgba(245, 158, 11, 0.55); }
+  .focus\:ring-amber-400\/60:focus { --tw-ring-color: rgba(245, 158, 11, 0.65); }
+  .focus\:ring-white\/20:focus     { --tw-ring-color: rgba(15, 23, 42, 0.25); }
 }
 
 /* ─── Holo card property ─────────────────────────── */
